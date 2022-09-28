@@ -10,6 +10,7 @@
 	<h1>Login - Gerenciamento de Usuarios</h1>
 
 	<form action="Login" method="post">
+	<input type="hidden" value="<%= request.getParameter("url")%> name="url">
 		<table>
 			<tr>
 				<td><label>Login</label></td>
