@@ -7,13 +7,24 @@
 <title>Gerenciamento de Usuarios</title>
 </head>
 <body>
-	<h1>Bem vindo a pagina principal</h1>
+	<h1>Login - Gerenciamento de Usuarios</h1>
 
-	<form action="receber-nome.jsp">
-	
-	<input name="nome">
-	<input name="idade">
-	<input type="submit" valeu="Enviar">
+	<form action="Login" method="post">
+		<table>
+			<tr>
+				<td><label>Login</label></td>
+				<td><input name="login" type="text"></td>
+			</tr>
+			<tr>
+				<td><label>Senha</label></td>
+				<td><input name="senha" type="password"></td>
+			</tr>
+			<tr>
+				<td/>
+				<td><input type="submit" value="Enviar"></td>
+			</tr>
+		</table>
+		<h4>${mensagem}</h4>
 	</form>
 </body>
 </html>
