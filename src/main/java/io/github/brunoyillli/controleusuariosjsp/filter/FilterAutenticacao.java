@@ -13,39 +13,59 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import io.github.brunoyillli.controleusuariosjsp.connection.SingleConnectionBanco;
 
 @WebFilter(urlPatterns = { "/principal/*" })
 public class FilterAutenticacao extends HttpFilter implements Filter {
 
 	private static final long serialVersionUID = -2936508568794476384L;
+	private static Connection connection;
 
 	public FilterAutenticacao() {
 
 	}
 
 	public void destroy() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		HttpServletRequest servletRequest = (HttpServletRequest) request;
-		HttpSession session = servletRequest.getSession();
+		try {
+			HttpServletRequest servletRequest = (HttpServletRequest) request;
+			HttpSession session = servletRequest.getSession();
 
-		String usuarioLogado = (String) session.getAttribute("usuario");
-		String urlParaAutenticar = servletRequest.getServletPath();
+			String usuarioLogado = (String) session.getAttribute("usuario");
+			String urlParaAutenticar = servletRequest.getServletPath();
 
-		if (usuarioLogado == null && !urlParaAutenticar.equalsIgnoreCase("/principal/Login")) {
-			RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
-			request.setAttribute("mensagem", "Por favor realize o login!");
-			redireciona.forward(request, response);
-			return;
-		} else {
-			chain.doFilter(request, response);
+			if (usuarioLogado == null && !urlParaAutenticar.equalsIgnoreCase("/principal/Login")) {
+				RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
+				request.setAttribute("mensagem", "Por favor realize o login!");
+				redireciona.forward(request, response);
+				return;
+			} else {
+				chain.doFilter(request, response);
+			}
+			connection.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-
+		connection = SingleConnectionBanco.getConnection();
 	}
 
 }
