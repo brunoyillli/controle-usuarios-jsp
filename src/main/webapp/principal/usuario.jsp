@@ -40,7 +40,7 @@
 															method="post">
 															<div class="form-group form-default">
 																<input type="text" name="id" id="id"
-																	class="form-control" disabled value="${modelLogin.id}"> <span
+																	class="form-control" readonly="readonly" value="${modelLogin.id}"> <span
 																	class="form-bar"></span> <label class="float-label">ID:</label>
 															</div>
 															<div class="form-group form-default">

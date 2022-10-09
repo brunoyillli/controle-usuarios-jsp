@@ -2,6 +2,7 @@ package io.github.brunoyillli.controleusuariosjsp.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import io.github.brunoyillli.controleusuariosjsp.connection.SingleConnectionBanco;
@@ -15,7 +16,7 @@ public class DAOUsuarioRepository {
 		connection = SingleConnectionBanco.getConnection();
 	}
 
-	public void gravarUsuario(ModelLogin login) throws SQLException {
+	public ModelLogin gravarUsuario(ModelLogin login) throws SQLException {
 		
 		String sql = "INSERT INTO model_login(login,senha,nome,email) VALUES (?,?,?,?)";
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -28,5 +29,26 @@ public class DAOUsuarioRepository {
 		
 		connection.commit();
 		
+		return this.consultaUsuario(login.getLogin());
+		
+	}
+	
+	public ModelLogin consultaUsuario(String login) throws SQLException {
+		ModelLogin modelLogin = new ModelLogin();
+		String sql = "SELECT * FROM model_login where upper(login) = upper('"+login+"')";
+		
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		
+		ResultSet resultado = preparedStatement.executeQuery();
+		
+		while(resultado.next()) {
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setSenha(resultado.getString("senha"));
+			modelLogin.setNome(resultado.getString("nome"));
+		}
+		
+		return modelLogin;
 	}
 }
