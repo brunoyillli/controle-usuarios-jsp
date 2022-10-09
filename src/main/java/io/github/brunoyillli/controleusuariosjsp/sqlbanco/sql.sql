@@ -8,14 +8,18 @@ CREATE DATABASE "controle-usuario-jsp"
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
 
-CREATE TABLE IF NOT EXISTS public.mode_login
+CREATE TABLE IF NOT EXISTS public.model_login
 (
-    login character varying(200) COLLATE pg_catalog."default",
-    senha character varying(200) COLLATE pg_catalog."default",
+    login character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    senha character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    id integer NOT NULL DEFAULT nextval('model_login_id_seq'::regclass),
+    nome character varying(300) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(300) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT model_login_pkey PRIMARY KEY (id),
     CONSTRAINT login_unique UNIQUE (login)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.mode_login
+ALTER TABLE IF EXISTS public.model_login
     OWNER to postgres;
