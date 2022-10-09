@@ -43,7 +43,7 @@
 <body>
 	<h1 class="titulo">Gerenciamento de Usuarios</h1>
 
-	<form action="Login" method="post"
+	<form action="<%=request.getContextPath()%>/Login" method="post"
 		class="mb-3 row formulario needs-validation" novalidate>
 		<input type="hidden" value="<%=request.getParameter("url")%>"
 			name="url">
