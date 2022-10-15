@@ -18,17 +18,32 @@ public class DAOUsuarioRepository {
 
 	public ModelLogin gravarUsuario(ModelLogin login) throws SQLException {
 
-		String sql = "INSERT INTO model_login(login,senha,nome,email) VALUES (?,?,?,?)";
-		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		if (login.isNovo()) {
 
-		preparedStatement.setString(1, login.getLogin());
-		preparedStatement.setString(2, login.getSenha());
-		preparedStatement.setString(3, login.getNome());
-		preparedStatement.setString(4, login.getEmail());
-		preparedStatement.execute();
+			String sql = "INSERT INTO model_login(login,senha,nome,email) VALUES (?,?,?,?)";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-		connection.commit();
+			preparedStatement.setString(1, login.getLogin());
+			preparedStatement.setString(2, login.getSenha());
+			preparedStatement.setString(3, login.getNome());
+			preparedStatement.setString(4, login.getEmail());
+			preparedStatement.execute();
 
+			connection.commit();
+
+		} else {
+			String sql = "UPDATE model_login SET login=?, senha=?, nome=?,email=? WHERE id = " + login.getId() + ";";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+			preparedStatement.setString(1, login.getLogin());
+			preparedStatement.setString(2, login.getSenha());
+			preparedStatement.setString(3, login.getNome());
+			preparedStatement.setString(4, login.getEmail());
+			preparedStatement.executeUpdate();
+			
+			connection.commit();
+		}
+		
 		return this.consultaUsuario(login.getLogin());
 
 	}
